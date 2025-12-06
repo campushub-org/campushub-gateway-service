@@ -18,8 +18,11 @@ public class GatewayConfig {
                 .filters(f -> f.rewritePath("/campushub-salle-service/(?<remaining>.*)", "/${remaining}"))
                 .uri("lb://campushub-salle-service"))
             .route("support_service_route", r -> r.path("/campushub-support-service/**")
-                .filters(f -> f.rewritePath("/campushub-support-service/(?<remaining>.*)", "/${remaining}"))
-                .uri("lb://campushub-support-service"))
+                    .filters(f -> f.rewritePath("/campushub-support-service/(?<remaining>.*)", "/${remaining}"))
+                    .uri("lb://campushub-support-service"))
+            .route("notification_service_route", r -> r.path("/campushub-notification-service/**")
+                    .filters(f -> f.rewritePath("/campushub-notification-service/(?<remaining>.*)", "/${remaining}"))
+                    .uri("lb://campushub-notification-service"))
             .build();
     }
 }
