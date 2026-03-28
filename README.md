@@ -1,40 +1,59 @@
-# campushub-gateway-service - API Gateway
+# 🚪 CampusHub - API Gateway Service
 
-Ce service est la porte d'entrée unique pour toutes les requêtes des clients vers l'écosystème de microservices Campushub. Il est basé sur Spring Cloud Gateway (en mode WebFlux) et est responsable du routage des requêtes vers les services appropriés.
+[![Java](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=java&logoColor=white)](https://www.oracle.com/java/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.5-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Spring Cloud](https://img.shields.io/badge/Spring_Cloud-2023.0.2-6DB33F?style=for-the-badge&logo=spring&logoColor=white)](https://spring.io/projects/spring-cloud)
 
-### Fonctionnalités
-
-*   **Routage des requêtes**: Redirige les requêtes des clients vers les microservices backend appropriés (e.g., `campushub-user-service`).
-*   **Configuration centralisée**: Obtient sa configuration de `campushub-config`.
-*   **Découverte de services**: S'enregistre auprès de `campushub-registry` pour découvrir les services backend.
-*   **Actuator**: Expose des endpoints de gestion pour surveiller et interagir avec la passerelle.
-
-### Configuration du routage
-
-Le routage est configuré de manière programmatique dans la classe `GatewayConfig.java`. Les routes sont définies à l'aide d'un bean `RouteLocator`.
-
-### Ports
-
-*   **Port de l'application**: `8080` (pour les requêtes des clients)
-*   **Port de gestion (Actuator)**: `8084` (pour les endpoints de gestion)
-
-### Endpoints de l'API (Actuator)
-
-Voici un endpoint de gestion utile pour diagnostiquer et surveiller la passerelle. Notez qu'il est exposé sur le port de gestion `8084`.
+> L'**API Gateway** est la sentinelle de CampusHub. Elle centralise le routage des requêtes, la gestion des politiques de sécurité (CORS) et offre une façade unifiée pour tous les microservices métier.
 
 ---
 
-#### 1. Lister les routes actives
+## 🚀 Fonctionnalités Clés
 
-Permet de voir toutes les routes actuellement chargées par la passerelle.
+- **Routage Dynamique** : Redirection intelligente vers les microservices (`user-service`, `salle-service`, `support-service`) basée sur le chemin d'URL.
+- **Façade Unifiée** : Un seul hôte et port (`8080`) pour l'intégralité du backend.
+- **Gestion des CORS** : Configuration centralisée pour autoriser les interactions avec le Front-end.
+- **Haute Disponibilité** : Intégration avec Eureka pour équilibrer la charge entre les instances de services.
+- **Observabilité** : Endpoints Actuator pour le monitoring de l'état de santé du système.
 
-- **Méthode :** `GET`
-- **Path :** `/actuator/gateway/routes`
-- **Permissions :** Publique (sur le port de gestion)
+---
 
-**Exemple `curl`:**
+## 🗺️ Plan de Routage
+
+| Préfixe de Route | Destination | Port Interne |
+| :--- | :--- | :--- |
+| `/campushub-user-service/**` | **User Service** | `8081` |
+| `/campushub-salle-service/**` | **Salle Service** | `8082` |
+| `/campushub-support-service/**` | **Support Service** | `8083` |
+
+---
+
+## 🛠️ Stack Technique
+
+- **Core :** Spring Boot 3.2.5
+- **Routing :** Spring Cloud Gateway
+- **Discovery :** Eureka Client integration
+- **Config :** Spring Cloud Config Client
+
+---
+
+## ⚙️ Configuration & Installation
+
+### Build du package (Crucial)
 ```bash
-curl http://localhost:8084/actuator/gateway/routes
+# Générer le JAR en sautant les tests
+./mvnw clean package -DskipTests
+```
+
+### Lancement Local
+```bash
+./mvnw spring-boot:run
+```
+
+### Déploiement Docker
+```bash
+docker build -t campushub-gateway-service .
 ```
 
 ---
+<p align="center">Une porte d'entrée unique vers l'excellence académique</p>
